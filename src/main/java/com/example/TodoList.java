@@ -18,15 +18,33 @@ public class TodoList extends VerticalLayout {
     setWidth("80%");
   }
 
+  public TodoList() {
+    ArrayList<Todo> todos = new ArrayList<>();
+    todos.add(new Todo("Task 1"));
+    todos.add(new Todo("Task 2"));
+    setTodos(todos);
+  }
+
   private void setTodos(List<Todo> todos) {
     this.todos = todos;
-    todos.forEach(todo -> add(new TodoLayout(todo)));
+    removeAll();
+    todos.forEach(todo -> {
+      TodoLayout todoLayout = new TodoLayout(todo);
+      todoLayout.addDeleteListener(this::removeTodo);
+      add(todoLayout);
+    });
+  }
+
+  private void removeTodo(DeleteEvent deleteEvent) {
+    Todo todo = deleteEvent.getTodo();
+    this.todos.remove(todo);
+    setTodos(todos);
   }
 
   void addTodo(Todo todo) {
     System.out.println("TodoList: "+ todo.getTask());
     todos.add(todo);
-    add(new TodoLayout(todo));
+    setTodos(todos);
   }
 
   public void deleteCompleted() {
