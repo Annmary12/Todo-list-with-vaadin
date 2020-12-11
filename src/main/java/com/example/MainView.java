@@ -1,6 +1,8 @@
 package com.example;
 
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
@@ -43,28 +45,41 @@ public class MainView extends VerticalLayout {
      * @param service The message service. Automatically injected Spring managed bean.
      */
     public MainView(@Autowired GreetService service) {
-       VerticalLayout todosList = new VerticalLayout();
        TextField taskField = new TextField();
-       Button addButton = new Button("Add");
+
+
        todoList = new TodoList();
 
        add(
            new H1("My Todos"),
            todoList,
-           new HorizontalLayout(taskField, addButton)
+           new HorizontalLayout(taskField, addButton(taskField)),
+           deleteButton(todoList)
        );
 
-       addButton.addClickListener(e -> {
-         System.out.println("get Value: " + taskField.getValue());
-           todoList.addTodo(new Todo(taskField.getValue()));
-//           done = new Checkbox();
-//           task = new TextField(taskField.getValue());
-//           todosList.add(new TodoLayout(new Todo(taskField.getValue()) ));
-           taskField.clear();
-           taskField.focus();
-       });
 
+    }
 
+    public Button addButton(TextField taskField) {
+      Button addButton = new Button("Add");
+      addButton.addClickShortcut(Key.ENTER);
+      addButton.addClickListener(e -> {
+        todoList.addTodo(new Todo(taskField.getValue()));
+        taskField.clear();
+        taskField.focus();
+      });
+      return addButton;
+    }
+
+    public Button deleteButton(TodoList todoList){
+      Button deleteDoneTask = new Button("Delete Done Task");
+      deleteDoneTask.addThemeVariants(ButtonVariant.LUMO_ICON);
+      deleteDoneTask.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
+
+      deleteDoneTask.addClickListener(e -> {
+        todoList.deleteCompleted();
+      });
+      return  deleteDoneTask;
     }
 
 }

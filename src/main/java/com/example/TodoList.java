@@ -42,15 +42,19 @@ public class TodoList extends VerticalLayout {
   }
 
   void addTodo(Todo todo) {
-    System.out.println("TodoList: "+ todo.getTask());
     todos.add(todo);
     setTodos(todos);
   }
 
   public void deleteCompleted() {
-    todos.stream().map(todo -> {
-      return !todo.isDone();
-    });
+
+    for(Todo todo: todos){
+      if (todo.isDone()) {
+        todos.remove(todo);
+      }
+    }
+
+    setTodos(todos);
   }
 
   public void removeTodo() {

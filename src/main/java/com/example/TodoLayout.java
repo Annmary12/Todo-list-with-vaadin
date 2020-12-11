@@ -11,16 +11,12 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 
 public class TodoLayout extends HorizontalLayout {
-    private final Checkbox done;
-    private final TextField task;
-    private final Button deleteButton;
+    private final Checkbox done = new Checkbox();
+    private final TextField task = new TextField();
+    private final Button deleteButton = new Button("Delete");
 
     public TodoLayout(Todo todo){
-      done = new Checkbox();
-      task = new TextField();
-      deleteButton = new Button("Delete");
       deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-      System.out.println("Inside TodoLayout: "+ todo.getTask());
       add(done, task, deleteButton);
       setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
 
